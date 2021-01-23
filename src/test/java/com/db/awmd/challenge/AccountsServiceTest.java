@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.fail;
 
 import com.db.awmd.challenge.domain.Account;
+import com.db.awmd.challenge.domain.TransferResponse;
 import com.db.awmd.challenge.exception.DuplicateAccountIdException;
 import com.db.awmd.challenge.service.AccountsService;
 import java.math.BigDecimal;
@@ -42,5 +43,16 @@ public class AccountsServiceTest {
       assertThat(ex.getMessage()).isEqualTo("Account id " + uniqueId + " already exists!");
     }
 
+  }
+  
+  @Test
+  public void performTransferTest() {
+	  Account fromAccount = new Account("Id-123");
+	  fromAccount.setBalance(new BigDecimal(1000));
+	  Account toAccount = new Account("Id-456");
+	  fromAccount.setBalance(new BigDecimal(100));
+	  this.accountsService.performTransfer("Id-123", "Id-456", "200");
+	  assertThat(fromAccount.getBalance().equals(new BigDecimal(800)));
+	  assertThat(toAccount.getBalance().equals(new BigDecimal(300)));			// couple of more test cases can be written for various exception cases.
   }
 }
